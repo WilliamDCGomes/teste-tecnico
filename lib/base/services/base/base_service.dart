@@ -4,7 +4,7 @@ import 'package:teste_tecnico/base/services/login_service.dart';
 
 class BaseService extends GetConnect {
   SharedPreferences? sharedPreferences;
-  final String baseUrlApi = "";
+  final String baseUrlApi = "http://mobiletest.seventh.com.br/";
 
   BaseService() {
     httpClient.timeout = const Duration(seconds: 30);

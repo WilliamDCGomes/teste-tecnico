@@ -17,7 +17,6 @@ class AuthenticateResponse {
     required this.login,
     required this.expirationDate,
     required this.token,
-    required this.userType,
     required this.success,
   });
 
