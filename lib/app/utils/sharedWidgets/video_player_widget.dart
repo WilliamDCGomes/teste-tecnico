@@ -86,13 +86,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         )}",
                       ),
                     ),
-                    VideoProgressIndicator(
-                      controller,
-                      allowScrubbing: true,
-                      colors: const VideoProgressColors(
-                        backgroundColor: AppColors.backgroundPlayColor,
-                        playedColor: AppColors.defaultColor,
-                        bufferedColor: AppColors.bufferedColor,
+                    Container(
+                      height: 1.5.h,
+                      margin: EdgeInsets.symmetric(vertical: 1.h),
+                      child: VideoProgressIndicator(
+                        controller,
+                        allowScrubbing: true,
+                        colors: const VideoProgressColors(
+                          backgroundColor: AppColors.backgroundPlayColor,
+                          playedColor: AppColors.defaultColor,
+                          bufferedColor: AppColors.bufferedColor,
+                        ),
                       ),
                     ),
                     Row(
