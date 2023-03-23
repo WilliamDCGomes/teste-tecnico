@@ -1,6 +1,6 @@
 class AppPaths{
-  static const String jsonPath = "lib/app/assets/json/";
-  static const String imagesPath = "lib/app/assets/images/";
+  static const String jsonPath = "assets/json/";
+  static const String imagesPath = "assets/images/";
 
   // Caminho de todas as imagens .png
   static const String icon = "${imagesPath}.png";

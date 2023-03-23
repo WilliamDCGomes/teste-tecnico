@@ -14,11 +14,20 @@ class BaseService extends GetConnect {
   Future<String> getToken({bool getForcedToken = false}) async {
     try {
       sharedPreferences ??= sharedPreferences = await SharedPreferences.getInstance();
+
       String? token = sharedPreferences!.getString('Token');
       final String? tokenExpiration = sharedPreferences?.getString('TokenExpiration');
-      if (getForcedToken || (tokenExpiration != null && DateTime.now().compareTo(DateTime.parse(tokenExpiration)) >= 0)) {
-        String? token = (await LoginService().authenticate())?.token;
+      final String? login = sharedPreferences?.getString("login");
+      final String? password = sharedPreferences?.getString("password");
+
+      if (login != null && password != null && (getForcedToken || (tokenExpiration != null && DateTime.now().compareTo(DateTime.parse(tokenExpiration)) >= 0))) {
+        String? token = (await LoginService().authenticate(
+          login,
+          password,
+        ))?.token;
+
         if (token == null) throw Exception();
+
         token = token;
         sharedPreferences!.setString('Token', token);
       }
