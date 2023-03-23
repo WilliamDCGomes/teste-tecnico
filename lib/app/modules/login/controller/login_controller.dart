@@ -37,10 +37,6 @@ class LoginController extends GetxController {
     formKey = GlobalKey<FormState>();
     userInputController = TextEditingController();
     passwordInputController = TextEditingController();
-    if(kDebugMode){
-      userInputController.text = "candidato-seventh";
-      passwordInputController.text = "8n5zSrYq";
-    }
     passwordInputFocusNode = FocusNode();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     _loginService = LoginService();
