@@ -63,138 +63,140 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         await _closeVideo();
         return true;
       },
-      child: Obx(
-        () => Scaffold(
-          backgroundColor: AppColors.blackColor,
-          body: Stack(
-            children:[
-              InkWell(
-                onTap: (){
-                  showVideoControl.value = !showVideoControl.value;
-                },
-                splashColor: AppColors.transparentColor,
-                highlightColor: AppColors.transparentColor,
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: controller.value.aspectRatio,
-                    child: VideoPlayer(controller),
+      child: SafeArea(
+        child: Obx(
+          () => Scaffold(
+            backgroundColor: AppColors.blackColor,
+            body: Stack(
+              children:[
+                InkWell(
+                  onTap: (){
+                    showVideoControl.value = !showVideoControl.value;
+                  },
+                  splashColor: AppColors.transparentColor,
+                  highlightColor: AppColors.transparentColor,
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: VideoPlayer(controller),
+                    ),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: showVideoControl.value,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: InkWell(
-                    onTap: () async {
-                      await _closeVideo();
-                      Get.back();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: AppColors.whiteColor,
-                        size: 3.h,
+                Visibility(
+                  visible: showVideoControl.value,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: InkWell(
+                      onTap: () async {
+                        await _closeVideo();
+                        Get.back();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: AppColors.whiteColor,
+                          size: 3.h,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: showVideoControl.value,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
-                    padding: EdgeInsets.all(1.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.blackTransparentColor,
-                      borderRadius: BorderRadius.circular(1.h),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextWidget(
-                            "${FormatNumbers.formatVideoTime(
-                              controller.value.position.inSeconds,
-                            )} / ${FormatNumbers.formatVideoTime(
-                              controller.value.duration.inSeconds,
-                            )}",
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        Container(
-                          height: 10,
-                          margin: EdgeInsets.symmetric(vertical: 1.h),
-                          child: VideoProgressIndicator(
-                            controller,
-                            allowScrubbing: true,
-                            colors: const VideoProgressColors(
-                              backgroundColor: AppColors.backgroundPlayColor,
-                              playedColor: AppColors.defaultColor,
-                              bufferedColor: AppColors.bufferedColor,
+                Visibility(
+                  visible: showVideoControl.value,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
+                      padding: EdgeInsets.all(1.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.blackTransparentColor,
+                        borderRadius: BorderRadius.circular(1.h),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextWidget(
+                              "${FormatNumbers.formatVideoTime(
+                                controller.value.position.inSeconds,
+                              )} / ${FormatNumbers.formatVideoTime(
+                                controller.value.duration.inSeconds,
+                              )}",
+                              fontSize: 16.sp,
                             ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: (){
-                                if(controller.value.isPlaying){
-                                  controller.pause();
-                                }
-                                else{
-                                  controller.play();
-                                }
-                                setState(() {});
-                              },
-                              icon: Icon(
-                                controller.value.isPlaying? Icons.pause: Icons.play_arrow,
-                                color: AppColors.whiteColor,
+                          Container(
+                            height: 10,
+                            margin: EdgeInsets.symmetric(vertical: 1.h),
+                            child: VideoProgressIndicator(
+                              controller,
+                              allowScrubbing: true,
+                              colors: const VideoProgressColors(
+                                backgroundColor: AppColors.backgroundPlayColor,
+                                playedColor: AppColors.defaultColor,
+                                bufferedColor: AppColors.bufferedColor,
                               ),
                             ),
-                            IconButton(
-                              onPressed: (){
-                                controller.seekTo(const Duration(seconds: 0));
-                                setState(() {});
-                              },
-                              icon: const Icon(
-                                Icons.stop,
-                                color: AppColors.whiteColor,
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: (){
+                                  if(controller.value.isPlaying){
+                                    controller.pause();
+                                  }
+                                  else{
+                                    controller.play();
+                                  }
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  controller.value.isPlaying? Icons.pause: Icons.play_arrow,
+                                  color: AppColors.whiteColor,
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    isInFullScreen.value = !isInFullScreen.value;
-                                    if(isInFullScreen.value){
-                                      await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-                                    }
-                                    else{
-                                      await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-                                    }
-                                  },
-                                  icon: Icon(
-                                    isInFullScreen.value ? Icons.fullscreen_exit : Icons.fullscreen,
-                                    color: AppColors.whiteColor,
+                              IconButton(
+                                onPressed: (){
+                                  controller.seekTo(const Duration(seconds: 0));
+                                  setState(() {});
+                                },
+                                icon: const Icon(
+                                  Icons.stop,
+                                  color: AppColors.whiteColor,
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      isInFullScreen.value = !isInFullScreen.value;
+                                      if(isInFullScreen.value){
+                                        await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+                                      }
+                                      else{
+                                        await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+                                      }
+                                    },
+                                    icon: Icon(
+                                      isInFullScreen.value ? Icons.fullscreen_exit : Icons.fullscreen,
+                                      color: AppColors.whiteColor,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
