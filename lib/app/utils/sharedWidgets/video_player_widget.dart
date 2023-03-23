@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:video_player/video_player.dart';
@@ -7,11 +6,11 @@ import '../sharedWidgets/text_widget.dart';
 import '../stylePages/app_colors.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
-  final File videoFile;
+  final String videoLink;
 
   const VideoPlayerWidget({
     Key? key,
-    required this.videoFile,
+    required this.videoLink,
   }) : super(key: key);
 
   @override
@@ -19,16 +18,18 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  late bool isInFullScreen;
   late VideoPlayerController controller;
 
   @override
   void initState() {
+    isInFullScreen = false;
     loadVideoPlayer();
     super.initState();
   }
 
   loadVideoPlayer(){
-    controller = VideoPlayerController.file(widget.videoFile);
+    controller = VideoPlayerController.contentUri(Uri.parse(widget.videoLink));
     controller.addListener(() {
       setState(() {});
     });
@@ -60,63 +61,88 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextWidget(
-                      "${FormatNumbers.formatVideoTime(
-                        controller.value.position.inMinutes,
-                        controller.value.position.inSeconds,
-                      )} / ${FormatNumbers.formatVideoTime(
-                        controller.value.duration.inMinutes,
-                        controller.value.duration.inSeconds,
-                      )}",
-                    ),
-                  ),
-                  VideoProgressIndicator(
-                    controller,
-                    allowScrubbing: true,
-                    colors: const VideoProgressColors(
-                      backgroundColor: AppColors.backgroundPlayColor,
-                      playedColor: AppColors.defaultColor,
-                      bufferedColor: AppColors.bufferedColor,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: (){
-                          if(controller.value.isPlaying){
-                            controller.pause();
-                          }
-                          else{
-                            controller.play();
-                          }
-                          setState(() {});
-                        },
-                        icon:Icon(
-                          controller.value.isPlaying? Icons.pause: Icons.play_arrow,
-                          color: AppColors.whiteColor,
-                        ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 1.h, horizontal: 4.w),
+                padding: EdgeInsets.all(1.h),
+                decoration: BoxDecoration(
+                  color: AppColors.blackTransparentColor,
+                  borderRadius: BorderRadius.circular(1.h),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextWidget(
+                        "${FormatNumbers.formatVideoTime(
+                          controller.value.position.inMinutes,
+                          controller.value.position.inSeconds,
+                        )} / ${FormatNumbers.formatVideoTime(
+                          controller.value.duration.inMinutes,
+                          controller.value.duration.inSeconds,
+                        )}",
                       ),
-                      IconButton(
-                        onPressed: (){
-                          controller.seekTo(const Duration(seconds: 0));
-                          setState(() {});
-                        },
-                        icon: const Icon(
-                          Icons.stop,
-                          color: AppColors.whiteColor,
-                        ),
+                    ),
+                    VideoProgressIndicator(
+                      controller,
+                      allowScrubbing: true,
+                      colors: const VideoProgressColors(
+                        backgroundColor: AppColors.backgroundPlayColor,
+                        playedColor: AppColors.defaultColor,
+                        bufferedColor: AppColors.bufferedColor,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: (){
+                            if(controller.value.isPlaying){
+                              controller.pause();
+                            }
+                            else{
+                              controller.play();
+                            }
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            controller.value.isPlaying? Icons.pause: Icons.play_arrow,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            controller.seekTo(const Duration(seconds: 0));
+                            setState(() {});
+                          },
+                          icon: const Icon(
+                            Icons.stop,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                              onPressed: (){
+
+                                setState(() {
+                                  isInFullScreen = !isInFullScreen;
+                                });
+                              },
+                              icon: Icon(
+                                isInFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                                color: AppColors.whiteColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

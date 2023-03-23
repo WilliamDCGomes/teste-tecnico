@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/instance_manager.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/app_close_controller.dart';
 import '../../../utils/helpers/text_field_validators.dart';
@@ -17,11 +18,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late LoginPageController controller;
+  late LoginController controller;
 
   @override
   void initState() {
-    controller = Get.put(LoginPageController());
+    controller = Get.put(LoginController());
     super.initState();
   }
 

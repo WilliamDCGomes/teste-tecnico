@@ -1,10 +1,9 @@
-import 'dart:io';
 import 'base/base_service.dart';
 import 'interface/ivideo_service.dart';
 
 class VideoService extends BaseService implements IVideoService {
   @override
-  Future<File?> getVideo() async {
+  Future<String?> getVideo() async {
     try {
       final token = await getToken();
       final url = '${baseUrlApi}video/bunny.mp4';
@@ -12,8 +11,7 @@ class VideoService extends BaseService implements IVideoService {
 
       if (hasErrorResponse(response)) throw Exception();
 
-      print(response.body);
-      return null;
+      return response.body["url"];
     } catch (_) {
       return null;
     }

@@ -1,18 +1,14 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teste_tecnico/app/modules/mainMenu/page/main_menu_page.dart';
 import 'package:teste_tecnico/base/services/login_service.dart';
-import 'package:teste_tecnico/base/services/video_service.dart';
 import '../../../../base/services/interface/ilogin_service.dart';
-import '../../../../base/services/interface/ivideo_service.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/information_popup.dart';
-import '../../../utils/sharedWidgets/video_player_widget.dart';
 
-class LoginPageController extends GetxController {
+class LoginController extends GetxController {
   late RxBool cpfInputHasError;
   late RxBool passwordInputHasError;
   late RxBool isPasswordField;
@@ -23,9 +19,8 @@ class LoginPageController extends GetxController {
   late final GlobalKey<FormState> formKey;
   late SharedPreferences sharedPreferences;
   late ILoginService _loginService;
-  late IVideoService _videoService;
 
-  LoginPageController() {
+  LoginController() {
     _initializeVariables();
   }
 
@@ -49,7 +44,6 @@ class LoginPageController extends GetxController {
     passwordInputFocusNode = FocusNode();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     _loginService = LoginService();
-    _videoService = VideoService();
   }
 
   loginPressed() async {
@@ -67,19 +61,9 @@ class LoginPageController extends GetxController {
           await sharedPreferences.setString("password", passwordInputController.text.trim());
           await sharedPreferences.setString("token", authenticateResponse.token!);
 
-          await loadingWithSuccessOrErrorWidget.stopAnimation();
+          if (loadingWithSuccessOrErrorWidget.animationController.isAnimating) await loadingWithSuccessOrErrorWidget.stopAnimation();
 
-          await showDialog(
-            context: Get.context!,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return const InformationPopup(
-                warningMessage: "Sucesso",
-              );
-            },
-          );
-
-          await _openVideo();
+          Get.offAll(() => MainMenuPage());
         }
         else {
           if (loadingWithSuccessOrErrorWidget.animationController.isAnimating) await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
@@ -105,42 +89,6 @@ class LoginPageController extends GetxController {
           );
         },
       );
-    }
-  }
-
-  Future<void> _openVideo() async {
-    File? file = await _getVideoFile();
-
-    if (file != null) {
-      await SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual,
-        overlays: [],
-      );
-      await Get.to(() => VideoPlayerWidget(
-        videoFile: file,
-      ));
-      await SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual,
-        overlays: SystemUiOverlay.values,
-      );
-    }
-  }
-
-  Future<File?> _getVideoFile() async {
-    try {
-      await _videoService.getVideo();
-      return null;
-    } catch (_) {
-      await showDialog(
-        context: Get.context!,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const InformationPopup(
-            warningMessage: "Erro ao abrir o vídeo.",
-          );
-        },
-      );
-      return null;
     }
   }
 }

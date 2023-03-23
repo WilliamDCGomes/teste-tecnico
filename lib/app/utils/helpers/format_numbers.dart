@@ -6,13 +6,13 @@ class FormatNumbers {
     if (minutes < 10) {
       formatedMinutes += "0$minutes";
     } else {
-      formatedMinutes += minutes.toString();
+      formatedMinutes += minutes.toString().substring(0, 2);
     }
 
     if (seconds < 10) {
       formatedSeconds += "0$seconds";
     } else {
-      formatedSeconds += seconds.toString();
+      formatedSeconds += seconds.toString().substring(0, 2);
     }
 
     return "$formatedMinutes:$formatedSeconds";
