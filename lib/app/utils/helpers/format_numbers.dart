@@ -1,7 +1,12 @@
 class FormatNumbers {
-  static String formatVideoTime(int minutes, int seconds) {
+  static String formatVideoTime(int seconds) {
     String formatedMinutes = "";
     String formatedSeconds = "";
+    int minutes = 0;
+    while(seconds > 59){
+      minutes++;
+      seconds -= 60;
+    }
 
     if (minutes < 10) {
       formatedMinutes += "0$minutes";

@@ -39,6 +39,9 @@ class MainMenuController extends GetxController {
         SystemUiMode.manual,
         overlays: SystemUiOverlay.values,
       );
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
     }
   }
 

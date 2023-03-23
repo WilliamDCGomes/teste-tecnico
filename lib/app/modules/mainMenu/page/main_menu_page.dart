@@ -8,10 +8,16 @@ import '../../../utils/helpers/app_close_controller.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../controller/main_menu_controller.dart';
 
-class MainMenuPage extends StatelessWidget {
-  final MainMenuController controller = Get.put(MainMenuController());
+class MainMenuPage extends StatefulWidget {
 
-  MainMenuPage({Key? key}) : super(key: key);
+  const MainMenuPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainMenuPage> createState() => _MainMenuPageState();
+}
+
+class _MainMenuPageState extends State<MainMenuPage> {
+  final MainMenuController controller = Get.put(MainMenuController());
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,10 @@ class MainMenuPage extends StatelessWidget {
                           hintText: "Clique aqui para começar o vídeo!",
                           fontWeight: FontWeight.bold,
                           widthButton: 75.w,
-                          onPressed: () async => controller.openVideo(),
+                          onPressed: () async {
+                            await controller.openVideo();
+                            setState(() {});
+                          },
                         ),
                       ],
                     ),
