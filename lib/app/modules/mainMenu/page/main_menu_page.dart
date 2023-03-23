@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:teste_tecnico/app/utils/sharedWidgets/button_widget.dart';
@@ -31,27 +32,29 @@ class MainMenuPage extends StatelessWidget {
                 ),
                 body: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if(controller.videoLink.value != null && controller.videoLink.value != "")
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 2.h),
-                          child: TextWidget(
-                            "URL: ${controller.videoLink.value}",
-                            textColor: AppColors.blackColor,
-                            fontWeight: FontWeight.w600,
-                            maxLines: 5,
+                  child: Obx(
+                    () => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if(controller.videoLink.value != null && controller.videoLink.value != "")
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 2.h),
+                            child: TextWidget(
+                              "URL: ${controller.videoLink.value}",
+                              textColor: AppColors.blackColor,
+                              fontWeight: FontWeight.w600,
+                              maxLines: 5,
+                            ),
                           ),
+                        ButtonWidget(
+                          hintText: "Clique aqui para começar o vídeo!",
+                          fontWeight: FontWeight.bold,
+                          widthButton: 75.w,
+                          onPressed: () async => controller.openVideo(),
                         ),
-                      ButtonWidget(
-                        hintText: "Clique aqui para começar o vídeo!",
-                        fontWeight: FontWeight.bold,
-                        widthButton: 75.w,
-                        onPressed: () async => controller.openVideo(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
