@@ -40,7 +40,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   loadVideoPlayer(){
-    controller = VideoPlayerController.contentUri(Uri.parse(widget.videoLink));
+    controller = VideoPlayerController.network(widget.videoLink);
     controller.addListener(() {
       setState(() {});
     });
@@ -50,13 +50,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     controller.play();
   }
 
+  Future<void> _closeVideo() async {
+    await controller.seekTo(const Duration(seconds: 0));
+    setState(() {});
+    await controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await controller.seekTo(const Duration(seconds: 0));
-        setState(() {});
-        await controller.dispose();
+        await _closeVideo();
         return true;
       },
       child: Obx(
@@ -74,6 +78,26 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   child: AspectRatio(
                     aspectRatio: controller.value.aspectRatio,
                     child: VideoPlayer(controller),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: showVideoControl.value,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: InkWell(
+                    onTap: () async {
+                      await _closeVideo();
+                      Get.back();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: AppColors.whiteColor,
+                        size: 3.h,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -100,6 +124,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                             )} / ${FormatNumbers.formatVideoTime(
                               controller.value.duration.inSeconds,
                             )}",
+                            fontSize: 16.sp,
                           ),
                         ),
                         Container(

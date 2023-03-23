@@ -31,9 +31,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
             children: [
               Scaffold(
                 appBar: AppBar(
-                  title: const TextWidget(
+                  title: TextWidget(
                     "Teste Técnico",
                     fontWeight: FontWeight.w600,
+                    fontSize: 18.sp,
                   ),
                 ),
                 body: Padding(
@@ -50,6 +51,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                               "URL: ${controller.videoLink.value}",
                               textColor: AppColors.blackColor,
                               fontWeight: FontWeight.w600,
+                              fontSize: 18.sp,
                               maxLines: 5,
                             ),
                           ),

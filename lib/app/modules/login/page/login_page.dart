@@ -95,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                                       width: double.infinity,
                                       hasError: controller.cpfInputHasError.value,
                                       enableSuggestions: true,
-                                      keyboardType: TextInputType.name,
                                       textInputAction: TextInputAction.next,
                                       validator: (String? value) {
                                         String? validation = TextFieldValidators.loginValidation(value);
