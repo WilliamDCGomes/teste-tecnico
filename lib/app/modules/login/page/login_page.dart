@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Center(
                             child: TextWidget(
                               "TESTE TÉCNICO",
-                              textColor: AppColors.whiteColor,
+                              textColor: AppColors.backgroundColor,
                               fontSize: 26.sp,
                               textAlign: TextAlign.center,
                               fontWeight: FontWeight.bold,

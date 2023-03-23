@@ -2,23 +2,23 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:video_player/video_player.dart';
+import '../helpers/format_numbers.dart';
 import '../sharedWidgets/text_widget.dart';
 import '../stylePages/app_colors.dart';
-import 'format_numbers.dart';
 
-class VideoPlayerUtil extends StatefulWidget {
+class VideoPlayerWidget extends StatefulWidget {
   final File videoFile;
 
-  const VideoPlayerUtil({
+  const VideoPlayerWidget({
     Key? key,
     required this.videoFile,
   }) : super(key: key);
 
   @override
-  State<VideoPlayerUtil> createState() => _VideoPlayerUtilState();
+  State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
 }
 
-class _VideoPlayerUtilState extends State<VideoPlayerUtil> {
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController controller;
 
   @override

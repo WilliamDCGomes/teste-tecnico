@@ -11,27 +11,27 @@ class BaseService extends GetConnect {
     allowAutoSignedCert = true;
   }
 
-  Future<String> getToken({bool getForcedToken = false}) async {
+  Future<String> getToken() async {
     try {
       sharedPreferences ??= sharedPreferences = await SharedPreferences.getInstance();
 
-      String? token = sharedPreferences!.getString('Token');
-      final String? tokenExpiration = sharedPreferences?.getString('TokenExpiration');
+      String? oldToken = sharedPreferences!.getString('token');
       final String? login = sharedPreferences?.getString("login");
       final String? password = sharedPreferences?.getString("password");
 
-      if (login != null && password != null && (getForcedToken || (tokenExpiration != null && DateTime.now().compareTo(DateTime.parse(tokenExpiration)) >= 0))) {
-        String? token = (await LoginService().authenticate(
+      if (oldToken != null && login != null && password != null) {
+        String? newToken = (await LoginService().authenticate(
           login,
           password,
         ))?.token;
 
-        if (token == null) throw Exception();
+        if (newToken == null) throw Exception();
 
-        token = token;
-        sharedPreferences!.setString('Token', token);
+        oldToken = newToken;
+        sharedPreferences!.setString('Token', newToken);
       }
-      return token!;
+
+      return oldToken!;
     } catch (_) {
       throw Exception();
     }
@@ -61,7 +61,7 @@ class BaseService extends GetConnect {
 
     if (!response.unauthorized) return response;
 
-    final token = await getToken(getForcedToken: true);
+    final token = await getToken();
     return httpClient.get<T>(
       url,
       contentType: contentType,
@@ -94,7 +94,7 @@ class BaseService extends GetConnect {
 
     if (!response.unauthorized) return response;
 
-    final token = await getToken(getForcedToken: true);
+    final token = await getToken();
     return httpClient.post<T>(
       url,
       body: body,
